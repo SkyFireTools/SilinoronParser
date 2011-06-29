@@ -227,7 +227,7 @@ namespace SilinoronParser.Parsing
                     Console.ForegroundColor = ConsoleColor.Red;
 
                     Console.WriteLine("{0}: {1} (0x{2}) Length: {3} Time: {4}", (direction == 1) ? "Client->Server" : "Server->Client",
-                        opcode, ((int)opcode).ToString("X4"), length, time);
+                        (Opcode)opcode, ((int)opcode).ToString("X4"), length, time);
 
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine(Utilities.DumpPacketAsHex(packet));

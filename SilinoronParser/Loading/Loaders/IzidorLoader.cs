@@ -25,7 +25,7 @@ namespace SilinoronParser.Loading.Loaders
                 {
                     string line = tr.ReadLine();
                     string[] data = line.Split('<', '>', '"');
-                    DateTime time = Utilities.GetDateTimeFromUnixTime(Int32.Parse(data[2]));
+                    DateTime time = Utilities.GetDateTimeFromUnixTime(UInt32.Parse(data[2]));
                     byte direction = (byte)(data[4] == "StoC" ? 0 : 1);
                     ushort opcode = UInt16.Parse(data[6]);
                     string directdata = data[8];
