@@ -27,7 +27,7 @@ namespace SilinoronParser.Util
 
         private byte _currentByte;
         // position of the next bit in _currentByte to be read
-        private byte _bitPos = 8;
+        private sbyte _bitPos = -1;
 
         public ushort GetOpcode()
         {
@@ -407,24 +407,14 @@ namespace SilinoronParser.Util
             return val.Value;
         }
 
-        public byte ReadBit()
+        public bool ReadBit()
         {
-            if(_bitPos > 7)
+            if(_bitPos < 0)
             {
                 _currentByte = ReadByte();
-                _bitPos = 0;
+                _bitPos = 7;
             }
-            return (byte)(_currentByte >> (_bitPos++) & 1);
-        }
-
-        public bool ReadBitBool()
-        {
-            if (_bitPos > 7)
-            {
-                _currentByte = ReadByte();
-                _bitPos = 0;
-            }
-            return (_currentByte & (1 << _bitPos++)) != 0;
+            return ((_currentByte >> _bitPos--) & 1) != 0;
         }
 
         /// <summary>
@@ -435,7 +425,8 @@ namespace SilinoronParser.Util
             uint value = 0;
             for (int i = bitsCount - 1; i >= 0; i--)
             {
-                value |= (uint) ReadBit() << i;
+                if(ReadBit())
+                    value |= (uint) 1 << i;
             }
             return value;
         }

@@ -29,19 +29,19 @@ namespace SilinoronParser.Parsing.Parsers
 
             var flags2 = packet.ReadEnum<MoveFlagExtra>("Extra Movement Flags", 12);
 
-            if (HaveTransportData = packet.ReadBitBool())
+            if (HaveTransportData = packet.ReadBit())
             {
-                HaveTransportTime2 = packet.ReadBitBool();
-                HaveTransportTime3 = packet.ReadBitBool();
+                HaveTransportTime2 = packet.ReadBit();
+                HaveTransportTime3 = packet.ReadBit();
             }
 
-            HavePitch = packet.ReadBitBool();
+            HavePitch = packet.ReadBit();
 
-            if (HaveFallData = packet.ReadBitBool())
-                HaveFallDirection = packet.ReadBitBool();
+            if (HaveFallData = packet.ReadBit())
+                HaveFallDirection = packet.ReadBit();
 
-            HaveSplineElevation = packet.ReadBitBool();
-            UnknownBool = packet.ReadBitBool();
+            HaveSplineElevation = packet.ReadBit();
+            UnknownBool = packet.ReadBit();
 
             packet.ReadGuid("GUID");
             packet.ReadInt32("Time");

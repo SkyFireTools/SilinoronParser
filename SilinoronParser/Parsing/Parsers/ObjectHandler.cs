@@ -422,9 +422,6 @@ namespace SilinoronParser.Parsing.Parsers
                     packet.ReadVector4("Stationary Position");
             }
 
-            if (flags.HasFlag(UpdateFlag.Unknown1))
-                packet.ReadInt32("Unk Int32");
-
             if (flags.HasFlag(UpdateFlag.LowGuid))
                 packet.ReadInt32("Low GUID");
 
@@ -442,6 +439,19 @@ namespace SilinoronParser.Parsing.Parsers
 
             if (flags.HasFlag(UpdateFlag.GORotation))
                 packet.ReadPackedQuaternion("GO Rotation");
+
+            if (flags.HasFlag(UpdateFlag.Unknown2))
+            {
+                packet.ReadInt16("Unk Int16 1");
+                packet.ReadInt16("Unk Int16 2");
+                packet.ReadInt16("Unk Int16 3");
+            }
+
+            if (flags.HasFlag(UpdateFlag.Unknown3))
+            {
+                var count = packet.ReadByte("Unk count");
+                packet.ReadBytes(count * 4);    // count ints
+            }
 
             return moveInfo;
         }
