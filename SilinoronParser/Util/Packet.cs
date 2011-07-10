@@ -424,7 +424,7 @@ namespace SilinoronParser.Util
                 _currentByte = ReadByte();
                 _bitPos = 0;
             }
-            return _currentByte >> (_bitPos++) != 0;
+            return (_currentByte & (1 << _bitPos++)) != 0;
         }
 
         /// <summary>
