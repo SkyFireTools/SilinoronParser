@@ -15,43 +15,71 @@ namespace SilinoronParser.Parsing.Parsers
 
         public static MovementInfo ReadMovementInfo(Packet packet, Guid guid)
         {
+            bool HaveTransportData = false,
+                 HaveTransportTime2 = false,
+                 HaveTransportTime3 = false,
+                 HavePitch = false,
+                 HaveFallData = false,
+                 HaveFallDirection = false,
+                 HaveSplineElevation = false,
+                 UnknownBool = false;
             var info = new MovementInfo();
 
-            info.Flags = packet.ReadEnum<MoveFlag>("Movement Flags");
+            info.Flags = packet.ReadEnum<MoveFlag>("Movement Flags", 30);
 
-            var flags2 = packet.ReadEnum<MoveFlagExtra>("Extra Movement Flags");
+            var flags2 = packet.ReadEnum<MoveFlagExtra>("Extra Movement Flags", 12);
 
+            if (HaveTransportData = packet.ReadBitBool())
+            {
+                HaveTransportTime2 = packet.ReadBitBool();
+                HaveTransportTime3 = packet.ReadBitBool();
+            }
+
+            HavePitch = packet.ReadBitBool();
+
+            if (HaveFallData = packet.ReadBitBool())
+                HaveFallDirection = packet.ReadBitBool();
+
+            HaveSplineElevation = packet.ReadBitBool();
+            UnknownBool = packet.ReadBitBool();
+
+            packet.ReadGuid("GUID");
             packet.ReadInt32("Time");
             var pos = packet.ReadVector4("Position");
             info.Position = new Vector3(pos.X, pos.Y, pos.Z);
             info.Orientation = pos.O;
 
-            if (info.Flags.HasFlag(MoveFlag.OnTransport))
+            if (HaveTransportData)//info.Flags.HasFlag(MoveFlag.OnTransport))
             {
-                packet.ReadPackedGuid("Transport GUID");
+                packet.ReadGuid("Transport GUID");
                 packet.ReadVector4("Transport Position");
-                packet.ReadInt32("Transport Time");
                 packet.ReadByte("Transport Seat");
+                packet.ReadInt32("Transport Time");
 
-                if (flags2.HasFlag(MoveFlagExtra.InterpolatedPlayerMovement))
+                if (HaveTransportTime2)//flags2.HasFlag(MoveFlagExtra.InterpolatedPlayerMovement))
                     packet.ReadInt32("Transport Time 2");
+
+                if (HaveTransportTime3)
+                    packet.ReadInt32("Transport Time 3");
             }
 
-            if (info.Flags.HasAnyFlag(MoveFlag.Swimming | MoveFlag.Flying) ||
-                flags2.HasFlag(MoveFlagExtra.AlwaysAllowPitching))
+            if (HavePitch)//info.Flags.HasAnyFlag(MoveFlag.Swimming | MoveFlag.Flying) ||
+                //flags2.HasFlag(MoveFlagExtra.AlwaysAllowPitching))
                 packet.ReadSingle("Swim Pitch");
 
-            packet.ReadInt32("Fall Time");
-
-            if (info.Flags.HasFlag(MoveFlag.Falling))
+            if (HaveFallData) // info.Flags.HasFlag(MoveFlag.Falling)
             {
+                packet.ReadInt32("Fall Time");
                 packet.ReadSingle("Jump Velocity");
-                packet.ReadSingle("Jump Sin");
-                packet.ReadSingle("Jump Cos");
-                packet.ReadSingle("Jump XY Speed");
+                if (HaveFallDirection)
+                {
+                    packet.ReadSingle("Jump Sin");
+                    packet.ReadSingle("Jump Cos");
+                    packet.ReadSingle("Jump XY Speed");
+                }
             }
 
-            if (info.Flags.HasFlag(MoveFlag.SplineElevation))
+            if (HaveSplineElevation) //info.Flags.HasFlag(MoveFlag.SplineElevation))
                 packet.ReadSingle("Spline Elevation");
 
             return info;

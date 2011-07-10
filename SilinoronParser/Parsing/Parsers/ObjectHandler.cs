@@ -15,7 +15,7 @@ namespace SilinoronParser.Parsing.Parsers
         private static readonly Dictionary<uint, int> maxLevels = new Dictionary<uint, int>();
 
         // needs update
-        //[Parser(Opcode.SMSG_UPDATE_OBJECT)]
+        [Parser(Opcode.SMSG_UPDATE_OBJECT)]
         public static void HandleUpdateObject(Packet packet)
         {
             var map = packet.ReadInt16("Map");

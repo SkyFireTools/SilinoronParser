@@ -25,6 +25,10 @@ namespace SilinoronParser.Util
 
         private readonly byte _direction;
 
+        private byte _currentByte;
+        // position of the next bit in _currentByte to be read
+        private byte _bitPos = 8;
+
         public ushort GetOpcode()
         {
             return _opcode;
@@ -352,7 +356,7 @@ namespace SilinoronParser.Util
             return val;
         }
 
-        private KeyValuePair<long, T> ReadEnum<T>(TypeCode code)
+        private KeyValuePair<long, T> ReadEnum<T>(TypeCode code, byte bitsCount = (byte)0)
         {
             var type = typeof(T);
             object value = null;
@@ -387,6 +391,9 @@ namespace SilinoronParser.Util
                 case TypeCode.UInt64:
                     rawVal = (long)ReadUInt64();
                     break;
+                case TypeCode.DBNull:
+                    rawVal = ReadBits(bitsCount);
+                    break;
             }
             value = System.Enum.ToObject(type, rawVal);
 
@@ -396,6 +403,46 @@ namespace SilinoronParser.Util
         public T ReadEnum<T>(string name, TypeCode code = TypeCode.Empty)
         {
             KeyValuePair<long, T> val = ReadEnum<T>(code);   
+            Console.WriteLine("{0}: {1} ({2})", name, val.Value, val.Key);
+            return val.Value;
+        }
+
+        public byte ReadBit()
+        {
+            if(_bitPos > 7)
+            {
+                _currentByte = ReadByte();
+                _bitPos = 0;
+            }
+            return (byte)(_currentByte >> (_bitPos++) & 1);
+        }
+
+        public bool ReadBitBool()
+        {
+            if (_bitPos > 7)
+            {
+                _currentByte = ReadByte();
+                _bitPos = 0;
+            }
+            return _currentByte >> (_bitPos++) != 0;
+        }
+
+        /// <summary>
+        /// Reads an integer stored in bitsCount bits inside the bit stream.
+        /// </summary>
+        public uint ReadBits(byte bitsCount)
+        {
+            uint value = 0;
+            for (int i = bitsCount - 1; i >= 0; i--)
+            {
+                value |= (uint) ReadBit() << i;
+            }
+            return value;
+        }
+
+        public T ReadEnum<T>(string name, byte bitsCount)
+        {
+            KeyValuePair<long, T> val = ReadEnum<T>(TypeCode.DBNull, bitsCount);
             Console.WriteLine("{0}: {1} ({2})", name, val.Value, val.Key);
             return val.Value;
         }
