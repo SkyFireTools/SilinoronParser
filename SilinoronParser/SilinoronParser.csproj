@@ -89,6 +89,7 @@
     <Compile Include="Parsing\Handler.cs" />
     <Compile Include="Parsing\ParserAttribute.cs" />
     <Compile Include="Parsing\Parsers\ChatHandler.cs" />
+    <Compile Include="Parsing\Parsers\CharacterHandler.cs" />
     <Compile Include="Parsing\Parsers\GuildHandler.cs" />
     <Compile Include="Parsing\Parsers\MiscHandler.cs" />
     <Compile Include="Parsing\Parsers\MovementHandler.cs" />
