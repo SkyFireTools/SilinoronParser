@@ -81,6 +81,7 @@
     <Compile Include="Enums\UpdateType.cs" />
     <Compile Include="Loading\Loader.cs" />
     <Compile Include="Loading\LoaderAttribute.cs" />
+    <Compile Include="Loading\Loaders\PktLoader.cs" />
     <Compile Include="Loading\Loaders\IzidorLoader.cs" />
     <Compile Include="Loading\Loaders\SynricLoader.cs" />
     <Compile Include="Loading\Loaders\TiawpsLoader.cs" />
