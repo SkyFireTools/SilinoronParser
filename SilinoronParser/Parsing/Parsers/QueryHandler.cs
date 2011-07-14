@@ -70,12 +70,17 @@ namespace SilinoronParser.Parsing.Parsers
             for (var i = 0; i < 4; i++)
                 c.Name[i] = packet.ReadCString("Name " + i);
 
+            for (var i = 0; i < 4; i++)
+                c.Name[i] = packet.ReadCString("Unk string " + i);
+
             c.SubName = packet.ReadCString("Sub Name");
             c.IconName = packet.ReadCString("Icon Name");
 
             c.TypeFlags = packet.ReadEnum<CreatureTypeFlag>("Type Flags");
             c.Type = packet.ReadEnum<CreatureType>("Type");
+
             c.Family = packet.ReadEnum<CreatureFamily>("Family");
+            int val = packet.ReadInt32("Unk int");
             c.Rank = packet.ReadEnum<CreatureRank>("Rank");
             c.KillCredit1 = packet.ReadInt32("Kill Credit 1");
             c.KillCredit2 = packet.ReadInt32("Kill Credit 2");
@@ -114,7 +119,7 @@ namespace SilinoronParser.Parsing.Parsers
             go.CastCaption = packet.ReadCString("Cast Caption");
             go.UnkString = packet.ReadCString("Unk String");
 
-            for (var i = 0; i < 24; i++)
+            for (var i = 0; i < 32; i++)
                 go.Data[i] = packet.ReadInt32("Data " + i);
 
             go.Size = packet.ReadSingle("Size");

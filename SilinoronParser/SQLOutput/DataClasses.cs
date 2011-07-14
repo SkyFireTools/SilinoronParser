@@ -109,9 +109,9 @@ namespace SilinoronParser.SQLOutput
         }
     }
 
-    public sealed class TwentyFourInts
+    public sealed class ThirtyTwoInts
     {
-        public static readonly int DATA_SIZE = 24;
+        public static readonly int DATA_SIZE = 32;
         private int[] data = new int[DATA_SIZE];
         public int this[int index]
         {

@@ -9,7 +9,7 @@ namespace SilinoronParser.SQLOutput
         public GameObject()
         {
             Name = new FourStrings();
-            Data = new TwentyFourInts();
+            Data = new ThirtyTwoInts();
             QuestItems = new SixInts();
         }
 
@@ -20,7 +20,7 @@ namespace SilinoronParser.SQLOutput
         public string IconName { get; set; }
         public string CastCaption { get; set; }
         public string UnkString { get; set; }
-        public TwentyFourInts Data { get; private set; }
+        public ThirtyTwoInts Data { get; private set; }
         public float Size { get; set; }
         public SixInts QuestItems { get; private set; }
         public int Exp { get; set; }
